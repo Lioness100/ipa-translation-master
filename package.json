@@ -1,0 +1,31 @@
+{
+	"name": "ipa-translation-master",
+	"module": "src/index.ts",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"start": "bun run .",
+		"pm2": "pm2 start ecosystem.yml"
+	},
+	"dependencies": {
+		"colorette": "^2.0.20",
+		"conf": "^14.0.0",
+		"dedent": "^1.7.0"
+	},
+	"devDependencies": {
+		"@lioness100/configs": "^1.0.34",
+		"@types/bun": "latest",
+		"eslint": "^8.57.0",
+		"pm2": "^6.0.11",
+		"prettier": "^3.6.2"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"prettier": "@lioness100/configs/prettier",
+	"eslintConfig": {
+		"extends": [
+			"./node_modules/@lioness100/configs/.eslintrc.json"
+		]
+	}
+}
