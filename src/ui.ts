@@ -155,7 +155,7 @@ export function renderStatistics(profile: UserProfile) {
 	for (let i = 0; i < Math.max(leftColumn.length, rightColumn.length); i++) {
 		const left = leftColumn[i] ?? '';
 		const right = rightColumn[i] ?? '';
-		const line = `${left.padEnd(columnLength)}${right}\n`;
+		const line = `${left.padEnd(columnLength - (i === 0 ? 10 : 0))}${right}\n`;
 		statsText += i === 0 ? bold(line) : line;
 	}
 
