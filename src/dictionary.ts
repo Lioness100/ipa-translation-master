@@ -12,10 +12,10 @@ function calculateDifficulty(word: string, ipa: string) {
 	} else if (word.length <= 10) {
 		score += 2;
 	} else {
-		score += 3;
+		score += 4;
 	}
 
-	const complexSounds = ['θ', 'ð', 'ʃ', 'ʒ', 'ŋ', 'tʃ', 'dʒ', 'æ', 'ɔj', 'aj', 'aw', 'ɚ', 'ɝ'];
+	const complexSounds = ['θ', 'ð', 'ʃ', 'ʒ', 'ʊ', 'ŋ', 'tʃ', 'dʒ', 'ɔj', 'aj', 'aw', 'ej', 'ow', 'ɚ', 'ɝ'];
 	const complexCount = complexSounds.reduce((count, sound) => {
 		return count + (ipa.split(sound).length - 1);
 	}, 0);
@@ -28,7 +28,7 @@ function calculateDifficulty(word: string, ipa: string) {
 	}
 
 	if (syllableCount >= 5) {
-		score += 1;
+		score += 2;
 	}
 
 	if (score <= 2) {
@@ -83,4 +83,23 @@ export function getRandomWord(difficulty: DifficultyLevel | null) {
 export function getIPA(word: string) {
 	const entry = words.find((w) => w.word === word);
 	return entry?.ipa;
+}
+
+export function* createWordGenerator(difficulty: DifficultyLevel | null) {
+	const wordsForDifficulty = difficulty ? (wordsByDifficulty.get(difficulty) ?? []) : words;
+	let pool: Word[] = [];
+
+	while (true) {
+		if (pool.length === 0) {
+			const newPool = [...wordsForDifficulty];
+			for (let i = newPool.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[newPool[i], newPool[j]] = [newPool[j], newPool[i]];
+			}
+
+			pool = newPool;
+		}
+
+		yield pool.pop()!;
+	}
 }

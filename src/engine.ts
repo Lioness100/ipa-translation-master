@@ -1,6 +1,5 @@
-/* eslint-disable unicorn/prefer-event-target */
-import { getIPA, getRandomWord } from './dictionary';
-import { type GameState, type GameSettings, GameMode, DifficultyLevel, type AnswerResult } from './types';
+import { createWordGenerator, getIPA } from './dictionary';
+import { type GameState, type GameSettings, GameMode, DifficultyLevel, type AnswerResult, type Word } from './types';
 
 export class GameEngine {
 	public readonly state: GameState;
@@ -8,6 +7,7 @@ export class GameEngine {
 	private timer?: NodeJS.Timeout;
 	private onTimeUpCallback?: () => void;
 	private readonly wordStartTimes = new Map<string, Date>();
+	private readonly wordGenerator: Iterator<Word, void>;
 
 	public constructor(public readonly settings: GameSettings) {
 		this.state = {
@@ -26,6 +26,7 @@ export class GameEngine {
 			currentWordStartTime: new Date()
 		};
 
+		this.wordGenerator = createWordGenerator(settings.difficulty);
 		this.initializeGame();
 	}
 
@@ -57,7 +58,7 @@ export class GameEngine {
 	}
 
 	public nextWord() {
-		this.state.currentWord = getRandomWord(this.settings.difficulty);
+		this.state.currentWord = this.wordGenerator.next().value!;
 		this.state.totalWords++;
 		this.state.attempts = 0;
 		this.state.currentWordStartTime = new Date();
