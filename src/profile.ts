@@ -208,7 +208,9 @@ function getMostPlayedMode(currentMode: GameMode) {
 	const modeCounts: Record<GameMode, number> = {
 		[GameMode.Classic]: 0,
 		[GameMode.TimeAttack]: 0,
-		[GameMode.Streak]: 0
+		[GameMode.Streak]: 0,
+		[GameMode.Streak50]: 0,
+		[GameMode.Streak100]: 0
 	};
 
 	for (const game of history) {

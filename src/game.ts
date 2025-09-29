@@ -42,7 +42,7 @@ export class Game {
 			this.inPrompt = false;
 		}
 
-		return answer?.trim().toLowerCase() ?? null;
+		return answer?.trim() ?? null;
 	}
 
 	private async selectDifficulty() {
@@ -77,7 +77,14 @@ export class Game {
 			mode,
 			difficulty,
 			timeLimit: mode === GameMode.TimeAttack ? 60 : undefined,
-			targetScore: mode === GameMode.Streak ? 10 : undefined
+			targetScore:
+				mode === GameMode.Streak
+					? 10
+					: mode === GameMode.Streak50
+						? 50
+						: mode === GameMode.Streak100
+							? 100
+							: undefined
 		};
 
 		this.gameEngine = new GameEngine(settings);
@@ -104,18 +111,20 @@ export class Game {
 			state.hintsEnabled = false;
 
 			const guess = await this.promptUser('\nYour answer: ', true);
-			if (guess === null || guess.toLowerCase() === 'quit') {
+			const guessLower = guess?.toLowerCase();
+
+			if (!guessLower || guessLower === 'quit') {
 				break;
 			}
 
-			if (guess.toLowerCase() === 'hint' && !state.hintsEnabled) {
+			if (guessLower === 'hint' && !state.hintsEnabled) {
 				state.hintsUsed++;
 				state.hintsEnabled = true;
 				lastFeedback = yellow(`💡 Hints used: ${state.hintsUsed}`);
 				continue;
 			}
 
-			const result = this.gameEngine.makeGuess(guess);
+			const result = this.gameEngine.makeGuess(guessLower);
 			lastFeedback = result.isCorrect
 				? green(`${state.streak && state.streak % 5 === 0 ? '🔥' : '✅'} ${result.feedback}`)
 				: red(`❌ ${result.feedback}`);
@@ -229,11 +238,13 @@ export class Game {
 			const profile = getProfile();
 			renderMenu(profile.name, profile.level, profile.experience);
 
-			const choice = await this.promptUser('\nChoose an option (1-8): ');
+			const choice = await this.promptUser('\nChoose an option (1-10): ');
 			const actions: (() => Promise<void> | void)[] = [
 				() => this.startGame(GameMode.Classic),
 				() => this.startGame(GameMode.TimeAttack),
 				() => this.startGame(GameMode.Streak),
+				() => this.startGame(GameMode.Streak50),
+				() => this.startGame(GameMode.Streak100),
 				() => this.showStatistics(),
 				() => this.showAchievements(),
 				() => this.showSettings(),

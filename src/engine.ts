@@ -145,7 +145,7 @@ export class GameEngine {
 	}
 
 	private checkWinCondition() {
-		return this.settings.mode === GameMode.Streak && this.state.streak >= (this.settings.targetScore ?? 10);
+		return this.state.streak >= (this.settings.targetScore ?? 0);
 	}
 
 	private endGame(isWinner: boolean) {

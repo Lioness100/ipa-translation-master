@@ -26,11 +26,11 @@ export function renderMenu(profileName: string, level: number, experience: numbe
 
 	const columns = [
 		['Game Modes:', 'Other Options:'],
-		['1. 📚 Classic Game', '4. 📊 View Statistics'],
-		['2. 🏃 Time Attack (60s)', '5. 🏆 View Achievements'],
-		['3. 🔥 10 Streak Challenge', '6. ⚙️  Settings'],
-		['', '7. ❓ Help'],
-		['', '8. 🚪 Exit']
+		['1. 📚 Classic Game', '6. 📊 View Statistics'],
+		['2. 🏃 Time Attack (60s)', '7. 🏆 View Achievements'],
+		['3. 🔥 10 Streak Challenge', '8. ⚙️  Settings'],
+		['4. 🐦 50 Streak Challenge', '9. ❓ Help'],
+		['5. 🚩 100 Streak Challenge', '10. 🚪 Exit']
 	];
 
 	const columnLength = Math.max(...columns.map(([line]) => line.length)) + 10;
@@ -217,10 +217,10 @@ export function renderHelp() {
 	renderTitle('❓ HELP & TUTORIAL');
 	console.log(dedent`
 		${bold('How to Play:')}
-		1. You'll see an IPA transcription like /kæt/
-		2. Type the English word that matches the pronunciation
+		1. You'll see an IPA transcription like ${'/kæt/'}
+		2. Type the English word that matches the pronunciation ("cat" in this case)
 		3. Press Enter to submit your answer
-		4. Type "hint" for additional help
+		4. Type "hint" for additional help\n
 	`);
 }
 
@@ -237,7 +237,7 @@ export function renderSettings() {
 
 export function renderGoodbye() {
 	console.log(dedent`
-		\n${cyan('👋 Thanks for playing IPA TRANSLATION Master!')}
+		\n${cyan('👋 Thanks for playing IPA Translation Master!')}
 		${yellow('Keep practicing those translations! 🎯')}
 	`);
 }

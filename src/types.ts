@@ -14,6 +14,8 @@ export enum DifficultyLevel {
 export enum GameMode {
 	Classic = 'classic',
 	Streak = 'streak',
+	Streak50 = 'streak50',
+	Streak100 = 'streak100',
 	TimeAttack = 'timeAttack'
 }
 
