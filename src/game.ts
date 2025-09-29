@@ -73,18 +73,17 @@ export class Game {
 		await loadWords();
 		const difficulty = await this.selectDifficulty();
 
+		const targetScores: Partial<Record<GameMode, number>> = {
+			[GameMode.Streak]: 10,
+			[GameMode.Streak50]: 50,
+			[GameMode.Streak100]: 100
+		};
+
 		const settings: GameSettings = {
 			mode,
 			difficulty,
 			timeLimit: mode === GameMode.TimeAttack ? 60 : undefined,
-			targetScore:
-				mode === GameMode.Streak
-					? 10
-					: mode === GameMode.Streak50
-						? 50
-						: mode === GameMode.Streak100
-							? 100
-							: undefined
+			targetScore: targetScores[mode]
 		};
 
 		this.gameEngine = new GameEngine(settings);
