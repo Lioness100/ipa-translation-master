@@ -112,7 +112,7 @@ export class Game {
 			const guess = await this.promptUser('\nYour answer: ', true);
 			const guessLower = guess?.toLowerCase();
 
-			if (!guessLower || guessLower === 'quit') {
+			if (guessLower === undefined || guessLower === 'quit') {
 				break;
 			}
 
