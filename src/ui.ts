@@ -98,8 +98,14 @@ function renderMainContent(settings: GameSettings, state: GameState, feedback?: 
 	console.log(mainText);
 }
 
+function renderHint(row: number, col: number, hint: Hint, show: boolean) {
+	process.stdout.write(`\u001B[${row};${col}H`);
+	const hintText = `${green(hint.symbol)}: ${show ? hint.example : '*'.repeat(hint.example.length)}\n`;
+	process.stdout.write(hintText);
+}
+
 function renderSidebar(hints: { example: string; symbol: string }[], show: boolean) {
-	const sidebarCol = MAIN_WIDTH - SIDEBAR_WIDTH + 1;
+	let sidebarCol = MAIN_WIDTH - SIDEBAR_WIDTH + 1;
 
 	process.stdout.write(`\u001B[4;${sidebarCol}H`);
 	process.stdout.write(yellow(bold('💡 IPA HINTS (type "hint")')));
@@ -107,12 +113,22 @@ function renderSidebar(hints: { example: string; symbol: string }[], show: boole
 	process.stdout.write(`\u001B[5;${sidebarCol}H`);
 	process.stdout.write(blue('─'.repeat(SIDEBAR_WIDTH)));
 
-	for (const [index, hint] of hints.slice(0, 10).entries()) {
-		const row = 7 + index;
-		process.stdout.write(`\u001B[${row};${sidebarCol}H`);
+	const maxRows = process.stdout.rows - 9;
+	if (hints.length > maxRows) {
+		const columns = [hints.slice(0, maxRows), hints.slice(maxRows)];
+		for (const colHints of columns) {
+			for (const [index, hint] of colHints.entries()) {
+				const row = 7 + index;
+				renderHint(row, sidebarCol, hint, show);
+			}
 
-		const hintText = `${green(hint.symbol)}: ${show ? hint.example : '*'.repeat(hint.example.length)}`;
-		process.stdout.write(hintText);
+			sidebarCol += Math.max(...columns[0].map((h) => h.example.length)) + 6;
+		}
+	} else {
+		for (const [index, hint] of hints.entries()) {
+			const row = 7 + index;
+			renderHint(row, sidebarCol, hint, show);
+		}
 	}
 
 	process.stdout.write(`\u001B[14;1H`);
